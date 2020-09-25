@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanroon.atten.reports.dao.UpProjectCompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.quanroon.atten.reports.entity.UpProjectCompany" >
+
+  </resultMap>
+
+  <delete id="deleteByExample">
+     delete from up_project_company where proj_id = #{projId}
+  </delete>
+
+  <!-- Your codes goes here!!! -->
+
+  <insert id="batchInsertUpProjectCompany">
+    insert into up_project_company (proj_id,credit_code,company_type) values
+      <foreach collection="list" item="company" separator=",">
+        (
+        #{company.projId},
+        #{company.creditCode},
+        #{company.companyType}
+        )
+      </foreach>
+  </insert>
+
+  <update id="batchUpdateUpProjectCompany">
+    update up_project_company
+    <set >
+      <if test="record.projId != null" >
+        proj_id = #{record.projId,jdbcType=INTEGER},
+      </if>
+      <if test="record.creditCode != null" >
+        credit_code = #{record.creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyType != null" >
+        company_type = #{record.companyType,jdbcType=VARCHAR},
+      </if>
+    </set>
+        where proj_id in
+    <foreach item="projId" collection="list"  open="(" separator="," close=")">
+        #{projId}
+    </foreach>
+  </update>
+
+
+</mapper>

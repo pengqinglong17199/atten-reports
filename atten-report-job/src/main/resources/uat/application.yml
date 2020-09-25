@@ -1,0 +1,90 @@
+#端口
+server:
+  port: 9791
+  adminPath: /reports
+  # spring boot定时器默认同步执行 多线程执行修改这个配置 多少个定时器就修改多少
+  threadSize: 4
+  fileBasePath: /home/tomcat/resource
+  servlet:
+    context-path: /
+
+#数据库
+spring:
+  datasource:
+    name: test
+    url: jdbc:mysql://172.21.1.55:3306/atten_zjj?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 10
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  profiles:
+    active: zjjconfig
+  redis:
+    database: 1
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    password: mymaster
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms    # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+    sentinel:
+      master: mymaster
+      nodes: 172.21.1.78:26379,172.21.1.79:26379
+
+quanroon:
+  rocketmq:
+    consumer:
+      on-off: true
+      name-server: 172.21.1.79:9876
+      group-name: uatApi
+      topic: report-server
+
+#mybatis
+mybatis:
+  type-aliases-package: com.quanroon.atten.reports.entity
+  mapper-locations: "classpath*:mapper/*.xml"
+
+
+#日志
+logging:
+  level:
+    com: DEBUG
+
+#jwt鉴权
+jwt:
+  secret: xx1WET12^%3^(WE45
+  token-header:
+    company: token
+    proj: Authorization
+  expire:
+    company: 604800
+    proj: 7200
+
+jinhua:
+  url: http://120.55.72.217:7777/open.api
+
+suzhou:
+  url: 47.92.228.5
+  port: 10201
+
+
+shenzhen:
+  shuiwuju:
+    url: http://thjt.fzfeidu.com.cn:8080
+bengbu:
+  url: http://220.248.243.244:7070/
